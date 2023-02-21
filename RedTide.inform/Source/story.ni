@@ -15,7 +15,7 @@ Book 1 - Uses and Includes
 Use American dialect and the serial comma.
 
 Include Gender Options by Nathanael Nerode.
-Include Brief Room Descriptions by Gavin Lambert.
+[Include Brief Room Descriptions by Gavin Lambert.]
 Include Conversation Package by Eric Eve.
 
 Book 2 - Intro, Help, and About
@@ -45,12 +45,10 @@ A thing can be examined or unexamined.
 Carry out examining something:
 	now the noun is examined.
 
-After deciding the scope of the player while the player reaches someone:
-	place the other party of the player in scope, but not its contents.
-
-[Check going:
+Check going:
+	[Constance should always be carrying the comms device when leaving]
 	if the player does not enclose the comms device:
-		say "As you leave, you realize that you don't have your comms device." instead;]
+		say "As you're about to leave, you instinctively reach down to check what you're carrying, and you realize that you don't have your comms device." instead.
 
 Book 4 - Actions
 
@@ -60,7 +58,7 @@ Part 1 - Pressing
 
 Pressing is an action applying to one visible thing. Understand "press [something preferably held]" as pressing.
 
-Before pressing a button when the player does not enclose the comms device:
+Before pressing a button when the player does not enclose a comms-device:
 	if the player can touch a comms-device (called the current-comms-device):
 		say "(first taking [the current-comms-device])[line break]";
 		silently try taking the current-comms-device;
@@ -71,46 +69,52 @@ Check pressing when the noun is not a button:
 	say "[The noun] [aren't] something that can be pressed." instead.
 
 Check pressing an end button when the player does not reach someone:
-	say "You're not on the line with anyone." instead.
+	say "You're not on the line with anyone, so the END button will do nothing." instead.
+
+Check pressing a mentor button when the player reaches someone:
+	say "You are already connected to [the other party of the player], so the MENTOR button will do nothing." instead;
 
 Carry out pressing a button (called the target-button):
 	let the current-comms-device be a random comms-device which can be touched by the player;
-	say "You press [the target-button] on [the current-comms-device][if the target-button is an end button]. You hear a click on the comms device and the call ends[end if].[paragraph break]";
+	say "You press [the target-button] on [the current-comms-device][run paragraph on]";
 	[end]
 	if the target-button is an end button:
+		say ". You hear a click on the comms device and the call ends.";
 		now the player does not reach anyone;
 	otherwise if the target-button is a mentor button:
 		[call]
-		if the current-comms-device is not ringing:
+		if the current-comms-device is not-ringing:
 			[don't like hardcoding Widd here]
-			if the player does not reach Widd and the player reaches someone:
-				say "(first ending your conversation with [the other party of the player])[command clarification break]";
-				say "Gotta go, need to call someone else.";
-				now the player does not reach anyone;
-			[Could Constance call somebody when pressing the mentor button? Seems to waste 'known' property]
-			now the player reaches Widd;
-			if Act I is happening:
-				Initiate a conversation with Widd at act-1-widd-node;
+			if the player does not reach Widd:
+				if the player reaches someone:
+					[assuming Constance can call other people]
+					say ", so you tell [the other party of the player] that you need to call someone else. 'Gotta go, need to call someone else.'";
+					now the player does not reach anyone;
+				say " and connect to Widd.";
+				now the player reaches Widd;
+				if Act I is happening:
+					Initiate a conversation with Widd at act-1-widd-node;
 		[answer]
 		otherwise:
-			if the current-comms-device is ringing:
+			if the current-comms-device is not-ringing:
+				say ", but your comms device is not currently ringing." instead;
+			otherwise:
 				if the player does not reach anyone:
 					if Widd is not seen:
 						now Widd is seen;
+					say " and connect to Widd.";
 					now the player reaches Widd; [Could somebody else call Constance?]
 					if the current-comms-device is ringing:
 						now the current-comms-device is not-ringing;
 					if Act I is happening:
 						Initiate a conversation with Widd at act-1-widd-node;
-			otherwise:
-				say "Your comms device is not currently ringing.";
 	[messages]
 	otherwise if the target-button is a messages button:
 		count-unread-messages;
 		if the count-of-unread-messages of the comms device is 0:
-			say "The display panel on [the current-comms-device] reads: [fixed letter spacing]No messages.[variable letter spacing]";
+			say ".[paragraph break]The display panel on [the current-comms-device] reads: [fixed letter spacing]No messages.[variable letter spacing]";
 		otherwise:
-			say "A list of messages on [the current-comms-device] appears on the display panel:[line break]";
+			say ".[paragraph break]A list of messages on [the current-comms-device] appears on the display panel:[line break]";
 			repeat through the Table of Comms Device Messages:
 				if the is-visible entry is true:
 					if the has-read entry is false:
@@ -175,8 +179,8 @@ Part 7 - Reading it from
 You can't see any such thing.]
 Reading it from is an action applying to one number and one visible thing. Understand "read message [a number] from [something preferably held]" and "read msg [a number] from [something preferably held]" and "read message [a number]" and "read msg [a number]" as reading it from.
 
-Before reading a number from a comms-device:
-	if the player can touch a comms-device (called the current-comms-device) and the player does not enclose a comms-device:
+Before reading a number from a comms-device when the player does not enclose a comms-device:
+	if the player can touch a comms-device (called the current-comms-device):
 		say "(first taking [the current-comms-device])[line break]";
 		silently try taking the current-comms-device;
 	otherwise:
@@ -187,7 +191,7 @@ Check reading it from when the second noun is not a comms-device:
 
 Carry out reading it from when the second noun is a comms-device:
 	if the number of rows in the Table of Comms Device Messages is less than the number understood:
-		say "The display display panel shows an error message: [fixed letter spacing]Message number [number understood] does not exist.[variable letter spacing][paragraph break]";
+		say "You speak into the comms device, 'Read message [number understood].' But the display panel shows an error message: [fixed letter spacing]Message number [number understood] does not exist.[variable letter spacing][paragraph break]";
 	otherwise:
 		choose row the number understood in the Table of Comms Device Messages;
 		if the is-visible entry is false:
@@ -196,6 +200,8 @@ Carry out reading it from when the second noun is a comms-device:
 			say "You speak into the comms device, 'Read message [number understood].' An artificially cheery voice from the comms device says, [italic type]'Retrieving message [number understood]...'[roman type][paragraph break]The recorded message plays through the speaker:[line break]  [italic type]'[message-body entry]'[roman type][paragraph break]";
 			if the has-read entry is false:
 				decrement the count-of-unread-messages of the comms device;
+				if the count-of-unread-messages of the comms device is 0:
+					now the comms device is read;
 				now the has-read entry is true;
 				let unread-messages-in-words-in-caps be "[the count-of-unread-messages of the comms device in words]" in upper case;
 				say "The cheery voice ends by saying, [italic type]'You now have [unread-messages-in-words-in-caps] unread message[s].'[roman type][paragraph break]".
@@ -244,9 +250,14 @@ To say list-wooden-table-stuff:
 	if the number of entries in L > 0:
 		say ". On the wooden table you can see [a list of visible things on the wooden table]".
 
-Book 6 - Relations
+Book 6 - Relations and Verbs
+
+Part 1 - Connection and to reach
 
 Connection relates one thing to another (called the other party). The verb to reach means the connection relation.
+
+After deciding the scope of the player while the player reaches someone:
+	place the other party of the player in scope, but not its contents.
 
 Book 7 - Rules
 
@@ -276,7 +287,7 @@ Part 2 - Supplying missing nouns
 
 Rule for supplying a missing noun while hanging up:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(on [the current-comms-device])[line break]";
+		say "([the current-comms-device])[line break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You need a comms device in order to hang up."
@@ -290,7 +301,7 @@ Rule for supplying a missing second noun while calling someone by name on:
 
 Rule for supplying a missing noun while answering:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(from [the current-comms-device])[line break]";
+		say "([the current-comms-device])[line break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to answer."
@@ -308,6 +319,31 @@ Rule for supplying a missing second noun while reading a number from:
 		now the second noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to read a message from."
+
+Part 3 - Locale descriptions
+
+[what if I have it so that Widd calls but Constance chooses not to pick up, Widd leaves a message...]
+[can it be buzzing and ringing at the same time? I guess if I allow a Widd call to leave to a message then, yes.]
+Before printing the locale description of a room (called the locale):
+	if the locale encloses the comms device:
+		if the comms device is ringing and the comms device is unread:
+			say "The comms device is ringing and buzzing simultaneously, generating a cacophony of dissonant sounds.";
+		otherwise if the comms device is ringing:
+			say "[one of]The comms device is ringing.[or]The comms device rings again, seemingly louder than the first time.[or]The comms device rings again.[stopping]";
+		otherwise if the comms device is unread:
+			say "You hear [if the player encloses the comms device]and feel [end if]the buzzing of the comms device.".
+
+Part 4 - Inventory details
+
+[might be overdoing it/too noisy, but maybe scoping this to inventory is fine]
+Rule for printing inventory details of the comms device:
+	[can it be buzzing and ringing at the same time? Probably.]
+	if the comms device is unread and the comms device is ringing:
+		say " (which is currently buzzing and ringing at the same time)[run paragraph on]";
+	otherwise if the comms device is unread:
+		say " (which is currently buzzing)[run paragraph on]";
+	otherwise if the comms device is ringing:
+		say " (which is currently ringing)[run paragraph on]";
 
 Book 8 - Model World
 
@@ -330,6 +366,11 @@ Understand "ringing" as a comms-device when a comms-device is ringing.
 Understand "push [comms-device]" and "press [comms-device]" as a mistake ("[bracket]There are three different buttons on the comms device: the MESSAGES button, the MENTOR button, and the END button. You can [bold type]press messages[roman type], [bold type]press mentor[roman type], or [bold type]press end[roman type], to press these buttons, respectively. Alternatively, if you know the message number on the comms device you want to read, you can [bold type]read message #[roman type] or [bold type]read msg #[roman type], replacing [bold type]#[roman type] with the message number.[close bracket]")
 
 Section 2 - Action Processing, Rules, and Phrases
+
+Before taking the comms device for the first time:
+	if the comms device is unexamined:
+		say "You pick up the thin, lightweight comms device. It has a speaker, a digital display panel, and at the bottom, three buttons labeled MESSAGES, MENTOR, and END.";
+		now the comms device is examined.
 
 Check dropping when the noun is a comms-device:
 	say "[comms-device-is-expensive]" instead.
@@ -360,9 +401,11 @@ Chapter 1 - Pod
 
 Section 1 - Objects in the room
 
-The Pod is a room in the Tenement. The description is "Your pod is a spartan and austere dwelling, which provides you basic shelter and limited amenities. This claustrophobic box of a room spans wider from east to west than north to south, with an uncomfortably low ceiling encroaching overhead. The walls of the room are thin, depressingly drab, and unadorned.[paragraph break]A small bed is tightly nestled along the eastern wall. In the center of the room, a [wooden table] and a wooden chair sit paired together[list-wooden-table-stuff]. A shadeless, electric light attached to the end of a chain dangles annoyingly close to the table from the low ceiling.[paragraph break]A pod door to the west leads out into the hallway."
+The Pod is a room in the Tenement. The description is "Your pod is a spartan and austere dwelling, which provides you basic shelter and limited amenities. This claustrophobic box of a room spans wider from east to west than north to south, with an uncomfortably low ceiling encroaching overhead. The walls of the room are thin, depressingly drab, and unadorned.[paragraph break]A small bed is tightly nestled along the eastern wall. In the center of the room, a wooden table and a [wooden chair] sit paired together. A shadeless, electric light attached to the end of a chain dangles annoyingly close to the table from the low ceiling. On the wooden table, you see a [comms device] and a [journal].[paragraph break]A [pod door] to the west leads out into the hallway."
 
-The brief description of the Pod is "A small bed is nestled along the eastern wall. A [wooden table] and a wooden chair are in the center of the room[list-wooden-table-stuff]. A shadeless, electric light hangs from the ceiling over the wooden table.[paragraph break]A pod door to the west leads out into the hallway."
+[
+The brief description of the Pod is "A small bed is nestled along the eastern wall. A wooden table and a wooden chair are in the center of the room. A shadeless, electric light hangs from the ceiling over the wooden table."
+]
 
 Constance is a known woman in the Pod. The player is Constance.
 
@@ -374,8 +417,8 @@ The thin walls are scenery in the Pod. The description is "The walls are so narr
 
 The small bed is an enterable scenery supporter in the Pod. The description is "A small, standard-issue bed, snugly nestled on the eastern end of the room. So snugly that it would probably scrape the walls if it had to be pulled out. Thin sheets lie on top of a firm mattress, slightly crumpled and unmade." Understand "east wall", "eastern wall", "standard-issued", "standard", "issued", "nestled", "bed frame", "bedframe", "crumpled", "sheet", "thin sheet", "sheets", "thin sheets", "firm", and "mattress" as the small bed.
 
-The comms device is a comms-device. The comms device is on the wooden table. The description of the comms device is "Your comms device is a thin, rectangular communications device. It's lightweight and fits comfortably in your hand. There's a small, oval-shaped speaker at the top, a digital display panel below the speaker, and three round buttons at the bottom: one labeled MESSAGES, one labeled MENTOR, and one labeled END[if the comms device is unread]. [paragraph break]The comms device is currently buzzing and the display panel says:[line break][fixed letter spacing]  Press MESSAGES to list messages.[variable letter spacing][end if][if the comms device is ringing]. [paragraph break]The comms device is currently ringing and the display panel says:[line break][fixed letter spacing]  Press MENTOR to answer call[variable letter spacing][end if]."
-Understand "flat", "thin", "lightweight", "digital", "display", "panel", "oval-shaped", "round buttons", "round button", and "speaker" as the comms device.
+The comms device is a comms-device. The comms device is on the wooden table. The description of the comms device is "A thin, rectangular communications device. It's lightweight and fits comfortably in your hand. There's a small, oval-shaped speaker at the top, a digital display panel below the speaker, and three round buttons at the bottom: one labeled MESSAGES, one labeled MENTOR, and one labeled END.[if the comms device is unread][paragraph break]The comms device is currently buzzing and the display panel says:[line break][fixed letter spacing]  Press MESSAGES to list messages[variable letter spacing][end if][if the comms device is ringing][paragraph break]The comms device is currently ringing and the display panel says:[line break][fixed letter spacing]  Press MENTOR to answer call[variable letter spacing][end if]".
+Understand "flat", "thin", "lightweight", "digital", "display", "panel", "oval-shaped", "round buttons", "round button", "button", and "speaker" as the comms device.
 
 A button is a kind of thing.
 A messages button, a mentor button, and an end button are buttons. A messages button, a mentor button, and an end button are parts of the comms device.
@@ -419,19 +462,15 @@ Check turning the small bed:
 Check taking the small bed:
 	say "[move-small-bed-text]" instead.
 
-Before listing nondescript items of the Pod:
-	if the wooden chair is marked for listing:
-		now the wooden chair is not marked for listing;
-	if the pod door is marked for listing:
-		now the pod door is not marked for listing.
-
 Chapter 2 - South Hallway 45th Floor
 
 Section 1 - Objects in the room
 
 The South Hallway 45th Floor is a room in the Tenement. The description is "Outside of your assigned pod, at the southern end of the 45th floor hallway of the tenement, dozens of squatty pod entrances stacked two-high extend down both sides of the long hallway. A steel catwalk wraps around the hallway, allowing residents to access the upper tier of pod entrances on this floor. Fluorescent lights on the ceiling chain all the way down the hallway, inundating the area in a blistering and harsh light. The hard floor below is barely padded with a thin layer of dark grey carpeting on top of concrete.[paragraph break]A ladder nearby leads up onto the steel catwalk. The hallway continues north. Your pod is through the pod door to the east."
 
+[
 The brief description of the South Hallway 45th Floor is "A ladder nearby leads up onto a steel catwalk that wraps all the way around the hallway. The hallway continues north. Your pod is through the pod door to the east."
+]
 
 [TODO: implement listen descriptions]
 
@@ -502,7 +541,7 @@ act-1-widd-node is a closed convnode.
 the ask-suggestions are { where to go }.
 
 node-introduction for act-1-widd-node:
-	say "'Constance? This is [the other party of the player].'"
+	say "'Constance? Widd here.'"
 
 Response for act-1-widd-node when asked about where to go:
 	say "Widd answers, 'You need to go to the farm compound.'".
@@ -519,11 +558,9 @@ Act I is a scene. Act I begins when play begins.
 
 Check going during Act I:
 	[At the beginning of the game, Constance needs to answer Widd's call]
-	if the comms device is ringing:
-		say "You start to head out, but you should answer the call that's coming in." instead;
-	[Constance should always be carrying the comms device when leaving]
-	if the player does not enclose the comms device:
-		say "You reach for the pod door to leave, but you remember that you need to bring your comms device." instead.
+	if the Pod encloses the player and the comms device is ringing:
+		[TODO: what about if the comms device is ringing and buzzing?]
+		say "You start to head out, but then you feel awkward leaving the ringing comms device unanswered." instead;
 
 Volume 3 - Debugging space and unfinished ideas
 
@@ -533,33 +570,6 @@ Every turn:
 	showme N.
 	[let T be act-1-answered-call;
 	showme T;]
-]
-
-[might be overdoing it/too noisy]
-[Rule for printing the name of the comms device:
-	if the comms device is visible:
-		[can it be buzzing and ringing at the same time? Probably.]
-		if the comms device is unread and the comms device is ringing:
-			say "[printed name of the comms device] (which is currently buzzing and ringing at the same time)[run paragraph on]";
-		otherwise if the comms device is unread:
-			say "[printed name of the comms device] (which is currently buzzing)[run paragraph on]";
-		otherwise if the comms device is ringing:
-			say "[printed name of the comms device] (which is currently ringing)[run paragraph on]";
-		otherwise:
-			say "[printed name of the comms device][run paragraph on]".]
-
-[what if I have it so that Widd calls but Constance chooses not to pick up, Widd leaves a message...]
-[can it be buzzing and ringing at the same time? I guess if I allow a Widd call to leave to a message then, yes.]
-[
-After doing anything other than pressing in the presence of the comms device:
-	if the comms device is touchable and the comms device is ringing:
-		say "[one of]The comms device is ringing nearby.[or]The comms device rings again, this time even louder than before.[or]The comms device continues to ring and it seems like it's not going to stop.[stopping]";
-		continue the action;
-
-After doing anything other than listing messages from or reading a number from in the presence of the comms device:
-	if the comms device is touchable and the comms device is unread:
-		say "You hear the buzzing of the comms device.";
-		continue the action;
 ]
 
 [Act I: Pod]
