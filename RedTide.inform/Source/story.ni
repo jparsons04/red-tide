@@ -21,24 +21,20 @@ Include Conversation Package by Eric Eve.
 Book 2 - Intro, Help, and About
 
 When play begins:
-	say "The intro goes here. The help also goes here.[paragraph break]You hear a piercing ring nearby...";
+	say "The intro goes here. The help also goes here.";
 	[The game starts with a call from Widd to retrieve on the comms device.]
+	now the rings-until-voicemail of the comms device is 5;
 	now the comms device is ringing;
 	count-unread-messages;
-	[the comms device act-1-pod-stops-ringing in four turns from now.]
 
 Every turn:
-	[Don't think I will have an unread message at the start of the game]
+	[Don't think I will have an unread message at the start of the game, so this would be ok]
 	count-unread-messages;
 	if the count-of-unread-messages of the comms device is greater than 0:
 		now the comms device is unread;
 
-[At the time when the comms device act-1-pod-stops-ringing:
-	say "Adding a message to the comms device."]
-
 Book 3 - Misc global things
 
-[Understand the printed name property as describing a person.]
 A person can be known or unknown.
 
 A thing can be examined or unexamined.
@@ -90,6 +86,8 @@ Carry out pressing a button (called the target-button):
 					[assuming Constance can call other people]
 					say ", so you tell [the other party of the player] that you need to call someone else. 'Gotta go, need to call someone else.'";
 					now the player does not reach anyone;
+				if Widd is not seen:
+					now Widd is seen;
 				say " and connect to Widd.";
 				now the player reaches Widd;
 				if Act I is happening:
@@ -112,15 +110,17 @@ Carry out pressing a button (called the target-button):
 	otherwise if the target-button is a messages button:
 		count-unread-messages;
 		if the count-of-unread-messages of the comms device is 0:
-			say ".[paragraph break]The display panel on [the current-comms-device] reads: [fixed letter spacing]No messages.[variable letter spacing]";
+			say ".[paragraph break]The display panel on [the current-comms-device] reads:[line break][fixed letter spacing]  No messages.[variable letter spacing][line break]";
 		otherwise:
-			say ".[paragraph break]A list of messages on [the current-comms-device] appears on the display panel:[line break]";
-			repeat through the Table of Comms Device Messages:
-				if the is-visible entry is true:
-					if the has-read entry is false:
-						say "[fixed letter spacing]  Message #[message-number entry]: [message-subject entry] (unread)[variable letter spacing][line break]";
+			say ".[paragraph break]The display panel shows a list of messages on [the current-comms-device] with further instructions:[line break][fixed letter spacing][run paragraph on]";
+			repeat with N running from 1 to the number of rows in the Table of Comms Device Messages:
+				choose row N from the Table of Comms Device Messages;
+				if there is a message-subject entry and the is-visible entry is true:
+					if the has-read in row N of the Table of Comms Device Messages is false:
+						say "  Message [N]: [message-subject entry] (unread)[line break]";
 					otherwise:
-						say "[fixed letter spacing]  Message #[message-number entry]: [message-subject entry][variable letter spacing][line break]".
+						say "  Message [N]: [message-subject entry][line break]";
+			say "  Speak the command 'READ MESSAGE #' to read a message. Substitute # with message number.[variable letter spacing][line break]";
 
 Part 2 - Pushing a button
 
@@ -152,14 +152,18 @@ Instead of calling Widd by name on the comms device:
 
 Part 5 - Answering
 
-Answering is an action applying to one thing and requiring light. Understand "answer [something preferably held]" and "answer call" as answering.
+Answering is an action applying to one thing and requiring light. Understand "answer [something preferably held]" and "answer on [something preferably held]" and "answer call on [something preferably held]" and "answer call" as answering.
 
-[Need to be careful about the ambiguity of "answer" (to a person)]
+[Need to be careful about the unintended confusion about not being able to "answer" a person]
 Check answering when the noun is not a comms-device:
 	say "Answering [the noun] does not work." instead.
 
 Instead of answering the comms device:
-	try pressing a mentor button.
+	let the current-comms-device be a random comms-device which can be touched by the player;
+	if the current-comms-device is ringing:
+		try pressing a mentor button;
+	otherwise:
+		say "The comms device is not currently ringing, so there is no call to answer."
 
 Part 6 - Listing messages from
 
@@ -177,7 +181,11 @@ Part 7 - Reading it from
 [TODO fix:
 >[19] read msg from journal
 You can't see any such thing.]
-Reading it from is an action applying to one number and one visible thing. Understand "read message [a number] from [something preferably held]" and "read msg [a number] from [something preferably held]" and "read message [a number]" and "read msg [a number]" as reading it from.
+Reading it from is an action applying to one number and one visible thing.
+Understand "read message [a number] from [something preferably held]" as reading it from.
+Understand "read msg [a number] from [something preferably held]" as reading it from.
+Understand "read message [a number]" as reading it from.
+Understand "read msg [a number]" as reading it from.
 
 Before reading a number from a comms-device when the player does not enclose a comms-device:
 	if the player can touch a comms-device (called the current-comms-device):
@@ -190,8 +198,8 @@ Check reading it from when the second noun is not a comms-device:
 	say "[The second noun] [aren't] something you can read messages from." instead.
 
 Carry out reading it from when the second noun is a comms-device:
-	if the number of rows in the Table of Comms Device Messages is less than the number understood:
-		say "You speak into the comms device, 'Read message [number understood].' But the display panel shows an error message: [fixed letter spacing]Message number [number understood] does not exist.[variable letter spacing][paragraph break]";
+	if the number of filled rows in the Table of Comms Device Messages is less than the number understood:
+		say "You speak into the comms device, 'Read message [number understood].' But the display panel shows an error message:[line break][fixed letter spacing]  Message number [number understood] does not exist.[variable letter spacing][paragraph break]";
 	otherwise:
 		choose row the number understood in the Table of Comms Device Messages;
 		if the is-visible entry is false:
@@ -204,7 +212,7 @@ Carry out reading it from when the second noun is a comms-device:
 					now the comms device is read;
 				now the has-read entry is true;
 				let unread-messages-in-words-in-caps be "[the count-of-unread-messages of the comms device in words]" in upper case;
-				say "The cheery voice ends by saying, [italic type]'You now have [unread-messages-in-words-in-caps] unread message[s].'[roman type][paragraph break]".
+				say "The cheery voice ends by saying, [italic type]'You now have [unread-messages-in-words-in-caps] unread message[s].'[roman type]".
 
 Part 8 - Putting it under
 
@@ -249,6 +257,24 @@ To say list-wooden-table-stuff:
 	let L be the list of visible things on the wooden table;
 	if the number of entries in L > 0:
 		say ". On the wooden table you can see [a list of visible things on the wooden table]".
+
+To say note-comms-device-state:
+	if the comms device is ringing and the comms device is unread:
+		say "The comms device is ringing and buzzing simultaneously, generating a cacophony of dissonant sounds[if the player encloses the comms device] and buzzing sensations throughout your body[end if].";
+	otherwise if the comms device is ringing:
+		say "[one of]You hear the ringing jingle of the comms device.[or]The comms device rings again, seemingly louder than the first time.[or]The comms device continues to ring.[stopping]";
+	otherwise if the comms device is unread:
+		decrease print-comms-device-buzzing by 1;
+		if the print-comms-device-buzzing is 0:
+			say "[one of]The comms device begins to buzz[if the player encloses the comms device], which sends a sharp tingle throughout your body in the process[end if].[or]The comms device buzzes once again[if the player encloses the comms device], sending a buzz coursing through your body as you carry the device[end if].[or]The comms device continues buzzing.[stopping]";
+			now the print-comms-device-buzzing is 3.
+
+To record (new-message-subject - text) and (new-message-body - text) in (target-table - table name):
+	choose a blank row in the target-table;
+	now the has-read entry is false;
+	now the is-visible entry is true;
+	now the message-subject entry is new-message-subject;
+	now the message-body entry is new-message-body;
 
 Book 6 - Relations and Verbs
 
@@ -301,7 +327,7 @@ Rule for supplying a missing second noun while calling someone by name on:
 
 Rule for supplying a missing noun while answering:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "([the current-comms-device])[line break]";
+		say "(on [the current-comms-device])[line break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to answer."
@@ -323,15 +349,10 @@ Rule for supplying a missing second noun while reading a number from:
 Part 3 - Locale descriptions
 
 [what if I have it so that Widd calls but Constance chooses not to pick up, Widd leaves a message...]
-[can it be buzzing and ringing at the same time? I guess if I allow a Widd call to leave to a message then, yes.]
+[can it be buzzing and ringing at the same time? I guess if I allow a Widd leave to a message then, yes.]
 Before printing the locale description of a room (called the locale):
 	if the locale encloses the comms device:
-		if the comms device is ringing and the comms device is unread:
-			say "The comms device is ringing and buzzing simultaneously, generating a cacophony of dissonant sounds.";
-		otherwise if the comms device is ringing:
-			say "[one of]The comms device is ringing.[or]The comms device rings again, seemingly louder than the first time.[or]The comms device rings again.[stopping]";
-		otherwise if the comms device is unread:
-			say "You hear [if the player encloses the comms device]and feel [end if]the buzzing of the comms device.".
+		say note-comms-device-state;
 
 Part 4 - Inventory details
 
@@ -358,7 +379,7 @@ Chapter 1 - Comms Device
 
 Section 1 - Object
 
-A comms-device is a kind of thing. A comms-device can be either unread or read. A comms-device can be either ringing or not-ringing. A comms-device has a number called the count-of-unread-messages.
+A comms-device is a kind of thing. A comms-device can be either unread or read. A comms-device can be either ringing or not-ringing. A comms-device has a number called the count-of-unread-messages. A comms-device has a number called the rings-until-voicemail.
 
 Understand "communications device" and "walkie-talkie" and "walkie talkie" as a comms-device.
 Understand "buzzing" and "vibrating" as a comms-device when a comms-device is unread.
@@ -381,15 +402,28 @@ Check throwing it at when the noun is a comms-device:
 Check inserting it into when the noun is a comms-device:
 	say "[comms-device-is-expensive]" instead.
 
+Print-comms-device-buzzing is a number that varies. Print-comms-device-buzzing is 3.
+
+Every turn:
+	if the comms device is ringing and the location of the player is the location of the comms device:
+		decrement the rings-until-voicemail of the comms device;
+		if the rings-until-voicemail of the comms device is 0:
+			now the rings-until-voicemail of the comms device is 5;
+			now the comms device is not-ringing;
+			[Just a placeholder for now, needs to be more flexible]
+			if Act I is happening:
+				say "The comms device stops ringing, but a few moments later, it buzzes three times in quick succession.";
+				record "Welcome" and “Constance, hi, Widd here. I just, er, wanted to reach out and welcome you aboard. I'm excited to have you join our crew here. Also probably a good time to make sure your device works too, which... appears to be the case. Anyway, you've probably got a lot on your mind, so don't worry too much about missing this call. We'll have plenty of time to talk through things when you get here. Looking forward to seeing you here at the farm compound and showing you the ropes. See you soon.” in the Table of Comms Device Messages;
+				now the comms device is unread;
+	say note-comms-device-state;
+
 Section 3 - Messages on Comms Device
 
-[TODO: need to include a help guide for listing/reading it]
 Table of Comms Device Messages
-has-read	is-visible	message-number	message-subject	message-body
-false	true	"1"	"Welcome"	“Constance, welcome to the team. I just, er, wanted to say hello. Making sure your device works. Look forward to seeing you at the compound and showing you the ropes.”
-false	false	"2"	"URGENT"	“This is an urgent message.”
-false	false	"3"	"Need help"	“Hey, I need help.”
-false	false	"4"	"Instructions"	“I need you to go do this then go do that.”
+has-read (a truth state)	is-visible (a truth state)	message-subject (some text)	message-body (some text)
+with 10 blank rows
+
+[“Constance, hi, Widd here. I just, er, wanted to reach out and welcome you aboard. You're probably still getting your bearings, so don't worry too much about missing this call. We'll have plenty of time to talk when you get here. Making sure your device works too. Looking forward to seeing you at the farm compound and showing you the ropes. See you soon.”]
 
 Chapter 2 - Journal
 
@@ -558,28 +592,20 @@ Act I is a scene. Act I begins when play begins.
 
 Check going during Act I:
 	[At the beginning of the game, Constance needs to answer Widd's call]
-	if the Pod encloses the player and the comms device is ringing:
-		[TODO: what about if the comms device is ringing and buzzing?]
-		say "You start to head out, but then you feel awkward leaving the ringing comms device unanswered." instead;
+	if the Pod encloses the player:
+		if the comms device is ringing or the comms device is unread:
+			say "You start to head out, but then you feel awkward leaving beind [if the comms device is ringing and the comms device is unread]the simultaneously ringing and buzzing[otherwise if the comms device is ringing]the ringing[otherwise if the comms device is unread]the buzzing[end if] comms device." instead;
 
 Volume 3 - Debugging space and unfinished ideas
 
-[
-Every turn:
-	let N be the count-of-unread-messages of the comms device;
-	showme N.
-	[let T be act-1-answered-call;
-	showme T;]
-]
-
 [Act I: Pod]
 
-test list-msg with "list messages / list msgs / check messages / check msgs / list messages from comms device / put comms on table / list msgs".
+test list-msg with "list messages / x comms / list msgs / check messages / check msgs / list messages from comms device / put comms on table / list msgs / z / z / z".
 test list-bad with "list messages from journal".
 test read-msg with "read msg 1 / read message 1 / read msg 1 from comms / read message 1 from comms".
-test read-bad with "read msg 10 / read msg from journal".
+test read-bad with "read msg 10 / read msg from journal / push comms / press comms".
 test comms-bad with "take comms / drop comms / throw comms at door / insert comms into door".
-test pod-answering with "answer comms / ask about where to go / bye".
+test pod-answering with "push mentor / ask about where to go / bye".
 test hang-up with "push mentor / a where to go / hang up".
 test after-bye-bad with "push end / answer call / call widd / push end / push mentor / ask about where to go / goodbye".
 
