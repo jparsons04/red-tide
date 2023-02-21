@@ -13,19 +13,15 @@ Volume 1 - Preface
 Book 1 - Uses and Includes
 
 Use American dialect and the serial comma.
+Use OMIT_UNUSED_ROUTINES of 1.
 
-Include Gender Options by Nathanael Nerode.
 [Include Brief Room Descriptions by Gavin Lambert.]
+Include Gender Options by Nathanael Nerode.
+Include Gender Speedup by Nathanael Nerode.
+Include Non-Binary Genders by Rainmaze. [With suggested fixes at https://intfiction.org/t/custom-pronouns-break-the-world/44993]
 Include Conversation Package by Eric Eve.
 
 Book 2 - Intro, Help, and About
-
-When play begins:
-	say "The intro goes here. The help also goes here.";
-	[The game starts with a call from Widd to retrieve on the comms device.]
-	now the rings-until-voicemail of the comms device is 5;
-	now the comms device is ringing;
-	count-unread-messages;
 
 Every turn:
 	[Don't think I will have an unread message at the start of the game, so this would be ok]
@@ -176,11 +172,27 @@ Check listing messages from when the noun is not a comms-device:
 Instead of listing messages from the comms device:
 	try pressing the messages button instead.
 
-Part 7 - Reading it from
+Part 7 - Message reading
 
-[TODO fix:
->[19] read msg from journal
-You can't see any such thing.]
+Message reading is an action applying to nothing. Understand "read message" and "read messages" and "read msg" and "read msgs" and "list message" and "list messages" as message reading.
+
+Instead of message reading:
+	say "(No specific message number specified. Will now try to list all messages from the comms device.)[paragraph break]";
+	try pressing a messages button.
+
+Part 8 - Reading messages from
+
+Reading messages from is an action applying to one visible thing. Understand "read message from [something preferably held]" and "read messages from [something preferably held]" and "read msg from [something preferably held]" and "read msgs from [something preferably held]" and "list message from [something preferably held]" and "list messages from [something preferably held]" as reading messages from.
+
+Check reading messages from when the noun is not a comms-device:
+	say "[The noun] [aren't] something you can read or list messages from." instead.
+
+Instead of reading messages from a comms device:
+	say "(No specific message number specified. Will now try to list all messages from the comms device.)[paragraph break]";
+	try pressing a messages button.
+
+Part 9 - Reading it from
+
 Reading it from is an action applying to one number and one visible thing.
 Understand "read message [a number] from [something preferably held]" as reading it from.
 Understand "read msg [a number] from [something preferably held]" as reading it from.
@@ -214,7 +226,7 @@ Carry out reading it from when the second noun is a comms-device:
 				let unread-messages-in-words-in-caps be "[the count-of-unread-messages of the comms device in words]" in upper case;
 				say "The cheery voice ends by saying, [italic type]'You now have [unread-messages-in-words-in-caps] unread message[s].'[roman type]".
 
-Part 8 - Putting it under
+Part 10 - Putting it under
 
 Putting it under is an action applying to two things.
 Understand "put [something] underneath/beneath/under [something]" as putting it under.
@@ -228,7 +240,7 @@ Understand "set [something] underneath/beneath/under [something]"as putting it u
 Check putting it under:
 	say "[The noun] can't be put under the [second noun]." instead.
 
-Part 9 - Making
+Part 11 - Making
 
 Making is an action applying to one thing and requiring light. Understand "make [something]" as making.
 
@@ -236,9 +248,6 @@ Check making:
 	say "[The noun] [aren't] something that can be made." instead.
 
 Book 5 - Phrases
-
-To say comms-device-is-expensive:
-	say "Not wanting to unnecessarily damage an expensive piece of equipment integral to your job, you think better of doing that."
 
 To count-unread-messages:
 	now the count-of-unread-messages of the comms device is 0;
@@ -250,14 +259,6 @@ To count-unread-messages:
 	otherwise:
 		now the comms device is read.
 
-To say move-small-bed-text:
-	say "You briefly consider moving the bed, but you'd rather not unnecessarily scrape the walls. You're pretty sure there isn't anything hidden behind the bed anyway."
-
-To say list-wooden-table-stuff:
-	let L be the list of visible things on the wooden table;
-	if the number of entries in L > 0:
-		say ". On the wooden table you can see [a list of visible things on the wooden table]".
-
 To say note-comms-device-state:
 	if the comms device is ringing and the comms device is unread:
 		say "The comms device is ringing and buzzing simultaneously, generating a cacophony of dissonant sounds[if the player encloses the comms device] and buzzing sensations throughout your body[end if].";
@@ -266,7 +267,7 @@ To say note-comms-device-state:
 	otherwise if the comms device is unread:
 		decrease print-comms-device-buzzing by 1;
 		if the print-comms-device-buzzing is 0:
-			say "[one of]The comms device begins to buzz[if the player encloses the comms device], which sends a sharp tingle throughout your body in the process[end if].[or]The comms device buzzes once again[if the player encloses the comms device], sending a buzz coursing through your body as you carry the device[end if].[or]The comms device continues buzzing.[stopping]";
+			say "[one of]The comms device buzzes[if the player encloses the comms device], which sends a sharp tingle throughout your body in the process[end if].[or]The comms device buzzes once again[if the player encloses the comms device], sending a buzz coursing through your body as you carry the device[end if].[or]The comms device continues buzzing.[stopping]";
 			now the print-comms-device-buzzing is 3.
 
 To record (new-message-subject - text) and (new-message-body - text) in (target-table - table name):
@@ -276,16 +277,21 @@ To record (new-message-subject - text) and (new-message-body - text) in (target-
 	now the message-subject entry is new-message-subject;
 	now the message-body entry is new-message-body;
 
-Book 6 - Relations and Verbs
+Book 6 - Adjectives and Lexicon
+
+Definition: A supporter is occupied if something is on it.
+
+Book 7 - Relations and Verbs
 
 Part 1 - Connection and to reach
 
+[From Example 226 - Four Cheeses. Making the comms device like a phone but more flexible like a walkie-talkie.]
 Connection relates one thing to another (called the other party). The verb to reach means the connection relation.
 
 After deciding the scope of the player while the player reaches someone:
 	place the other party of the player in scope, but not its contents.
 
-Book 7 - Rules
+Book 8 - Rules
 
 Part 1 - Visibility when calling over the line
 
@@ -348,8 +354,6 @@ Rule for supplying a missing second noun while reading a number from:
 
 Part 3 - Locale descriptions
 
-[what if I have it so that Widd calls but Constance chooses not to pick up, Widd leaves a message...]
-[can it be buzzing and ringing at the same time? I guess if I allow a Widd leave to a message then, yes.]
 Before printing the locale description of a room (called the locale):
 	if the locale encloses the comms device:
 		say note-comms-device-state;
@@ -366,7 +370,7 @@ Rule for printing inventory details of the comms device:
 	otherwise if the comms device is ringing:
 		say " (which is currently ringing)[run paragraph on]";
 
-Book 8 - Model World
+Book 9 - Model World
 
 Part 1 - Regions
 
@@ -402,6 +406,9 @@ Check throwing it at when the noun is a comms-device:
 Check inserting it into when the noun is a comms-device:
 	say "[comms-device-is-expensive]" instead.
 
+To say comms-device-is-expensive:
+	say "Not wanting to unnecessarily damage an expensive piece of equipment integral to your job, you think better of doing that."
+
 Print-comms-device-buzzing is a number that varies. Print-comms-device-buzzing is 3.
 
 Every turn:
@@ -410,10 +417,10 @@ Every turn:
 		if the rings-until-voicemail of the comms device is 0:
 			now the rings-until-voicemail of the comms device is 5;
 			now the comms device is not-ringing;
-			[Just a placeholder for now, needs to be more flexible]
+			[TODO: This if statement is just a placeholder for now, needs to be more flexible]
 			if Act I is happening:
 				say "The comms device stops ringing, but a few moments later, it buzzes three times in quick succession.";
-				record "Welcome" and “Constance, hi, Widd here. I just, er, wanted to reach out and welcome you aboard. I'm excited to have you join our crew here. Also probably a good time to make sure your device works too, which... appears to be the case. Anyway, you've probably got a lot on your mind, so don't worry too much about missing this call. We'll have plenty of time to talk through things when you get here. Looking forward to seeing you here at the farm compound and showing you the ropes. See you soon.” in the Table of Comms Device Messages;
+				record "Welcome" and “Constance, hi, Widd here. I just, er, wanted to reach out and welcome you aboard. I'm excited to have you join our crew here. Also probably a good time to make sure your device works too, which... appears to be the case. Anyway, you've probably got a lot on your mind, so don't worry too much about missing this call. We'll have plenty of time to talk through things when you get here. Looking forward to seeing you here at the farm compound and showing you around. See you soon.” in the Table of Comms Device Messages;
 				now the comms device is unread;
 	say note-comms-device-state;
 
@@ -422,8 +429,6 @@ Section 3 - Messages on Comms Device
 Table of Comms Device Messages
 has-read (a truth state)	is-visible (a truth state)	message-subject (some text)	message-body (some text)
 with 10 blank rows
-
-[“Constance, hi, Widd here. I just, er, wanted to reach out and welcome you aboard. You're probably still getting your bearings, so don't worry too much about missing this call. We'll have plenty of time to talk when you get here. Making sure your device works too. Looking forward to seeing you at the farm compound and showing you the ropes. See you soon.”]
 
 Chapter 2 - Journal
 
@@ -435,13 +440,13 @@ Chapter 1 - Pod
 
 Section 1 - Objects in the room
 
-The Pod is a room in the Tenement. The description is "Your pod is a spartan and austere dwelling, which provides you basic shelter and limited amenities. This claustrophobic box of a room spans wider from east to west than north to south, with an uncomfortably low ceiling encroaching overhead. The walls of the room are thin, depressingly drab, and unadorned.[paragraph break]A small bed is tightly nestled along the eastern wall. In the center of the room, a wooden table and a [wooden chair] sit paired together. A shadeless, electric light attached to the end of a chain dangles annoyingly close to the table from the low ceiling. On the wooden table, you see a [comms device] and a [journal].[paragraph break]A [pod door] to the west leads out into the hallway."
+The Pod is a room in the Tenement. The description is "Your pod is a spartan and austere dwelling, which provides you basic shelter and limited amenities. This claustrophobic box of a room spans wider from east to west than north to south, with an uncomfortably low ceiling encroaching overhead. The walls of the room are thin, depressingly drab, and unadorned.[paragraph break]A small bed is tightly nestled along the eastern wall. In the center of the room, a wooden table and a [wooden chair] sit paired together.[if the wooden table is occupied] On the wooden table, you see [a list of things on the wooden table].[end if] A shadeless, electric light attached to the end of a chain dangles annoyingly close to the table from the low ceiling.[paragraph break]A [pod door] to the west leads out into the hallway."
 
 [
 The brief description of the Pod is "A small bed is nestled along the eastern wall. A wooden table and a wooden chair are in the center of the room. A shadeless, electric light hangs from the ceiling over the wooden table."
 ]
 
-Constance is a known woman in the Pod. The player is Constance.
+Constance is a woman in the Pod. The player is Constance.
 
 The uncomfortably low ceiling is scenery in the Pod.
 
@@ -496,6 +501,9 @@ Check turning the small bed:
 Check taking the small bed:
 	say "[move-small-bed-text]" instead.
 
+To say move-small-bed-text:
+	say "You briefly consider moving the bed, but you'd rather not unnecessarily scrape the walls. You're pretty sure there isn't anything hidden behind the bed anyway."
+
 Chapter 2 - South Hallway 45th Floor
 
 Section 1 - Objects in the room
@@ -508,9 +516,8 @@ The brief description of the South Hallway 45th Floor is "A ladder nearby leads 
 
 [TODO: implement listen descriptions]
 
-[TODO: Need to fix is/are grammar. As written, this would display 'Jule are' for [They] [are] text substitutions]
-Jule is an ambiguously plural, plural-named person in the South Hallway 45th Floor. "Jule is standing outside of their pod." The description is "[regarding the noun][They] [are] quite something. [Their] demeanor is calm." The printed plural name is "they".
-Jule is not male, not female, and not neuter.
+[Something to be on the lookout for: verb conjugations in the singular they in parser output. The use of [do not] in Conversational Defaults, for example, causes default give-show responses to read "Jule do not respond" so these cases have to be explicitly overridden.]
+Jule is a plural-named enby in the South Hallway 45th Floor. "Jule is standing outside of their pod." The description is "[regarding the noun][They] [are] quite something. [Their] demeanor is calm."
 
 [Initiate open convnode upon entering, Jule/Gillian know that Constance is on her way to her new job. Constance can either engage in conversation or just keep going. If Constance leaves before talking, have them say something to the effect of "busy day ahead of you, eh? well, catch you later!" Something like that.]
 
@@ -519,7 +526,7 @@ Gillian is a woman in the South Hallway 45th Floor.
 A baby is a kind of person. A baby can be portable. A baby is usually portable.
 Eternity is a baby in the South Hallway 45th Floor. Eternity is male, not female, and not neuter.
 
-The fluorescent lights are scenery in the South Hallway 45th Floor. [strain]
+The fluorescent lights are scenery in the South Hallway 45th Floor. [eye strain]
 
 The hard floor is scenery in the South Hallway 45th Floor.
 
@@ -566,7 +573,7 @@ Does the player mean calling Widd by name on the comms device:
 When play begins:
 	now Widd carries widd-comms-device.
 
-Book 9 - Conversations
+Book 10 - Conversations
 
 Part 1 - Widd
 
@@ -584,11 +591,32 @@ node-termination for act-1-widd-node when saying goodbye to Widd:
 	say "[leavenode]You sign off by saying, 'Bye.' Widd replies, 'See you at the farm compound.'";
 	try pressing an end button;
 
+Part 2 - Jule
+
+default ask-tell response for Jule:
+	say "'Let's talk about that some other time,' they suggest."
+
+default ask-for response for Jule:
+	say "'Sorry, I can't help you with that right now,' they tell you."
+
+default yes-no response for Jule:
+	say "'Sorry?' Jule asks, puzzled. 'I didn't ask anything.'"
+
+default give-show response for Jule:
+	say "Jule looks curiously at [the noun] you're holding out, then they glance back up at you with an amused look. 'Are you... giving this to me or do you want me to tell you about it?' They chuckle and say, 'In any case, I don't need that, and I don't have anything useful to say about it.'"
+
 Volume 2 - Act I - The Apprenticeship
 
 Book 1 - Pod
 
 Act I is a scene. Act I begins when play begins.
+
+When play begins:
+	say "The intro goes here. The help also goes here.";
+	[The game starts with a call from Widd to retrieve on the comms device.]
+	now the rings-until-voicemail of the comms device is 5;
+	now the comms device is ringing;
+	count-unread-messages;
 
 Check going during Act I:
 	[At the beginning of the game, Constance needs to answer Widd's call]
@@ -598,11 +626,25 @@ Check going during Act I:
 
 Volume 3 - Debugging space and unfinished ideas
 
+[
+To suppose is a verb. To know is a verb. To appropriate is a verb.
+
+A page is a thing in the South Hallway 45th Floor. "A sheet of paper has been discarded on the floor." It has printed name "sheet of paper". Understand "sheet" or "paper" or "essay" as the page.
+
+After taking the page:
+	say "[We] [appropriate] [the noun] for [ourselves]. Turning it over [we] [see] it is a page from Orwells 1948 essay on Newspeak. It would seem that someone here is a joker."
+
+Instead of asking someone about something:
+	say "[We] [don't] [suppose] [regarding the noun][they] [know] what to tell [us] about [the topic understood], because [regarding the noun][their] response [are] a puzzled silence. [They] [appropriate] [the topic understood] for [themselves]. [They] [know]. [They] [do] go there."
+
+Test page with "get page / x page / ask Gillian about errors / ask Jule about errors / ask Gillian about horse / ask Jule about horse"
+]
+
 [Act I: Pod]
 
 test list-msg with "list messages / x comms / list msgs / check messages / check msgs / list messages from comms device / put comms on table / list msgs / z / z / z".
 test list-bad with "list messages from journal".
-test read-msg with "read msg 1 / read message 1 / read msg 1 from comms / read message 1 from comms".
+test read-msg with "read msg 1 / read message 1 / read msg 1 from comms / read message 1 from comms / read messages / read msgs from comms".
 test read-bad with "read msg 10 / read msg from journal / push comms / press comms".
 test comms-bad with "take comms / drop comms / throw comms at door / insert comms into door".
 test pod-answering with "push mentor / ask about where to go / bye".
