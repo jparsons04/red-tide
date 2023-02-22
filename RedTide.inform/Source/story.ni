@@ -44,7 +44,7 @@ Check going:
 
 Book 4 - Actions
 
-[reminder to use a thesaurus]
+[TODO: thesaurus the stuff here]
 
 Part 1 - Pressing
 
@@ -52,7 +52,7 @@ Pressing is an action applying to one visible thing. Understand "press [somethin
 
 Before pressing a button when the player does not enclose a comms-device:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(first taking [the current-comms-device])[line break]";
+		say "(first taking [the current-comms-device])[command clarification break]";
 		silently try taking the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy."
@@ -68,7 +68,7 @@ Check pressing a mentor button when the player reaches someone:
 
 Carry out pressing a button (called the target-button):
 	let the current-comms-device be a random comms-device which can be touched by the player;
-	say "You press [the target-button] on [the current-comms-device][run paragraph on]";
+	say "You press [the target-button][run paragraph on]";
 	[end]
 	if the target-button is an end button:
 		say ". You hear a click on the comms device and the call ends.";
@@ -80,23 +80,23 @@ Carry out pressing a button (called the target-button):
 			if the player does not reach Widd:
 				if the player reaches someone:
 					[assuming Constance can call other people]
-					say ", so you tell [the other party of the player] that you need to call someone else. 'Gotta go, need to call someone else.'";
+					say ", and you tell [the other party of the player] that you need to call someone else, 'Gotta go, need to call someone else.'";
 					now the player does not reach anyone;
 				if Widd is not seen:
 					now Widd is seen;
-				say " and connect to Widd.";
+				say " and connect your call.[no line break]";
 				now the player reaches Widd;
 				if Act I is happening:
 					Initiate a conversation with Widd at act-1-widd-node;
 		[answer]
 		otherwise:
 			if the current-comms-device is not-ringing:
-				say ", but your comms device is not currently ringing." instead;
+				say ", but [the current-comms-device] is not currently ringing so there is nothing to answer." instead;
 			otherwise:
 				if the player does not reach anyone:
 					if Widd is not seen:
 						now Widd is seen;
-					say " and connect to Widd.";
+					say " and then speak into the comms device, 'Hello?'[no line break]";
 					now the player reaches Widd; [Could somebody else call Constance?]
 					if the current-comms-device is ringing:
 						now the current-comms-device is not-ringing;
@@ -116,7 +116,7 @@ Carry out pressing a button (called the target-button):
 						say "  Message [N]: [message-subject entry] (unread)[line break]";
 					otherwise:
 						say "  Message [N]: [message-subject entry][line break]";
-			say "  Speak the command 'READ MESSAGE #' to read a message. Substitute # with message number.[variable letter spacing][line break]";
+			say "  Speak the command 'READ MESSAGE #' to read a message. Substitute # with message number.[variable letter spacing]";
 
 Part 2 - Pushing a button
 
@@ -146,15 +146,15 @@ Check calling it by name on:
 Instead of calling Widd by name on the comms device:
 	try pressing a mentor button.
 
-Part 5 - Answering
+Part 5 - Answering on
 
-Answering is an action applying to one thing and requiring light. Understand "answer [something preferably held]" and "answer on [something preferably held]" and "answer call on [something preferably held]" and "answer call" as answering.
+[Need to be careful about the unintended confusion about "answering" a person]
+Answering on is an action applying to one thing and requiring light. Understand "answer on [something preferably held]" and "answer call on [something preferably held]" and "answer [something preferably held]" and "answer call" as answering on.
 
-[Need to be careful about the unintended confusion about not being able to "answer" a person]
-Check answering when the noun is not a comms-device:
-	say "Answering [the noun] does not work." instead.
+Check answering on when the noun is not a comms-device:
+	say "Answering on [the noun] does not work." instead.
 
-Instead of answering the comms device:
+Instead of answering on the comms device:
 	let the current-comms-device be a random comms-device which can be touched by the player;
 	if the current-comms-device is ringing:
 		try pressing a mentor button;
@@ -177,7 +177,7 @@ Part 7 - Message reading
 Message reading is an action applying to nothing. Understand "read message" and "read messages" and "read msg" and "read msgs" and "list message" and "list messages" as message reading.
 
 Instead of message reading:
-	say "(No specific message number specified. Will now try to list all messages from the comms device.)[paragraph break]";
+	say "(No specific message number specified. Will now try to list all messages from the comms device.)[command clarification break]";
 	try pressing a messages button.
 
 Part 8 - Reading messages from
@@ -188,7 +188,7 @@ Check reading messages from when the noun is not a comms-device:
 	say "[The noun] [aren't] something you can read or list messages from." instead.
 
 Instead of reading messages from a comms device:
-	say "(No specific message number specified. Will now try to list all messages from the comms device.)[paragraph break]";
+	say "(No specific message number specified. Will now try to list all messages from the comms device.)[command clarification break]";
 	try pressing a messages button.
 
 Part 9 - Reading it from
@@ -201,7 +201,7 @@ Understand "read msg [a number]" as reading it from.
 
 Before reading a number from a comms-device when the player does not enclose a comms-device:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(first taking [the current-comms-device])[line break]";
+		say "(first taking [the current-comms-device])[command clarification break]";
 		silently try taking the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy."
@@ -279,6 +279,7 @@ To record (new-message-subject - text) and (new-message-body - text) in (target-
 
 Book 6 - Adjectives and Lexicon
 
+[There's an interesting idea from Example 357 - The Eye of the Idol if I want to distinguish in-place and out-of-place objects on supporters in room descriptions]
 Definition: A supporter is occupied if something is on it.
 
 Book 7 - Relations and Verbs
@@ -319,35 +320,35 @@ Part 2 - Supplying missing nouns
 
 Rule for supplying a missing noun while hanging up:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "([the current-comms-device])[line break]";
+		say "([the current-comms-device])[command clarification break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You need a comms device in order to hang up."
 		
 Rule for supplying a missing second noun while calling someone by name on:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(on [the current-comms-device])[line break]";
+		say "(on [the current-comms-device])[command clarification break]";
 		now the second noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to call someone."
 
-Rule for supplying a missing noun while answering:
+Rule for supplying a missing noun while answering on:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(on [the current-comms-device])[line break]";
+		say "(on [the current-comms-device])[command clarification break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to answer."
 
 Rule for supplying a missing noun while listing messages from:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(from [the current-comms-device])[line break]";
+		say "(from [the current-comms-device])[command clarification break]";
 		now the noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to list messages from."
 
 Rule for supplying a missing second noun while reading a number from:
 	if the player can touch a comms-device (called the current-comms-device):
-		say "(from [the current-comms-device])[line break]";
+		say "(from [the current-comms-device])[command clarification break]";
 		now the second noun is the current-comms-device;
 	otherwise:
 		say "You don't have a comms device handy to read a message from."
@@ -364,11 +365,11 @@ Part 4 - Inventory details
 Rule for printing inventory details of the comms device:
 	[can it be buzzing and ringing at the same time? Probably.]
 	if the comms device is unread and the comms device is ringing:
-		say " (which is currently buzzing and ringing at the same time)[run paragraph on]";
+		say " (which is currently buzzing and ringing at the same time)";
 	otherwise if the comms device is unread:
-		say " (which is currently buzzing)[run paragraph on]";
+		say " (which is currently buzzing)";
 	otherwise if the comms device is ringing:
-		say " (which is currently ringing)[run paragraph on]";
+		say " (which is currently ringing)";
 
 Book 9 - Model World
 
@@ -385,17 +386,17 @@ Section 1 - Object
 
 A comms-device is a kind of thing. A comms-device can be either unread or read. A comms-device can be either ringing or not-ringing. A comms-device has a number called the count-of-unread-messages. A comms-device has a number called the rings-until-voicemail.
 
-Understand "communications device" and "walkie-talkie" and "walkie talkie" as a comms-device.
+Understand "communications" and "device" and "communications device" and "walkie-talkie" and "walkie talkie" as a comms-device.
 Understand "buzzing" and "vibrating" as a comms-device when a comms-device is unread.
 Understand "ringing" as a comms-device when a comms-device is ringing.
 Understand "push [comms-device]" and "press [comms-device]" as a mistake ("[bracket]There are three different buttons on the comms device: the MESSAGES button, the MENTOR button, and the END button. You can [bold type]press messages[roman type], [bold type]press mentor[roman type], or [bold type]press end[roman type], to press these buttons, respectively. Alternatively, if you know the message number on the comms device you want to read, you can [bold type]read message #[roman type] or [bold type]read msg #[roman type], replacing [bold type]#[roman type] with the message number.[close bracket]")
 
 Section 2 - Action Processing, Rules, and Phrases
 
-Before taking the comms device for the first time:
+After taking the comms device for the first time:
 	if the comms device is unexamined:
-		say "You pick up the thin, lightweight comms device. It has a speaker, a digital display panel, and at the bottom, three buttons labeled MESSAGES, MENTOR, and END.";
-		now the comms device is examined.
+		now the comms device is examined;
+		say "You pick up a thin, lightweight communications device. It has a speaker, a digital display panel, and at the bottom, three buttons labeled MESSAGES, MENTOR, and END.";
 
 Check dropping when the noun is a comms-device:
 	say "[comms-device-is-expensive]" instead.
@@ -582,7 +583,7 @@ act-1-widd-node is a closed convnode.
 the ask-suggestions are { where to go }.
 
 node-introduction for act-1-widd-node:
-	say "'Constance? Widd here.'"
+	say "A voice responds, 'Constance? Widd here.'"
 
 Response for act-1-widd-node when asked about where to go:
 	say "Widd answers, 'You need to go to the farm compound.'".
@@ -622,23 +623,9 @@ Check going during Act I:
 	[At the beginning of the game, Constance needs to answer Widd's call]
 	if the Pod encloses the player:
 		if the comms device is ringing or the comms device is unread:
-			say "You start to head out, but then you feel awkward leaving beind [if the comms device is ringing and the comms device is unread]the simultaneously ringing and buzzing[otherwise if the comms device is ringing]the ringing[otherwise if the comms device is unread]the buzzing[end if] comms device." instead;
+			say "You start to head out, but then you feel awkward leaving behind the [if the comms device is ringing and the comms device is unread]simultaneously ringing and buzzing[otherwise if the comms device is ringing]ringing[otherwise if the comms device is unread]buzzing[end if] comms device." instead;
 
 Volume 3 - Debugging space and unfinished ideas
-
-[
-To suppose is a verb. To know is a verb. To appropriate is a verb.
-
-A page is a thing in the South Hallway 45th Floor. "A sheet of paper has been discarded on the floor." It has printed name "sheet of paper". Understand "sheet" or "paper" or "essay" as the page.
-
-After taking the page:
-	say "[We] [appropriate] [the noun] for [ourselves]. Turning it over [we] [see] it is a page from Orwells 1948 essay on Newspeak. It would seem that someone here is a joker."
-
-Instead of asking someone about something:
-	say "[We] [don't] [suppose] [regarding the noun][they] [know] what to tell [us] about [the topic understood], because [regarding the noun][their] response [are] a puzzled silence. [They] [appropriate] [the topic understood] for [themselves]. [They] [know]. [They] [do] go there."
-
-Test page with "get page / x page / ask Gillian about errors / ask Jule about errors / ask Gillian about horse / ask Jule about horse"
-]
 
 [Act I: Pod]
 
